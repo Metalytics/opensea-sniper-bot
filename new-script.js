@@ -1,36 +1,21 @@
-const BigNumber = require('bignumber.js');
+require('dotenv').config();
 const opensea = require("opensea-js");
-var { OrderSide } = require('opensea-js/lib/types');
 const OpenSeaPort = opensea.OpenSeaPort;
 const Network = opensea.Network;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const args = require('yargs').argv;
-const helpers = require("./helpers.js");
-require('dotenv').config();
 const getOrder = require('./getorderblob')
 
 
 const providerUrl = process.env.PROVIDER_URL; // "https://api.zmok.io/mainnet/637zzh0pyyopztwz"
 var extraGas = args.extraGas; // add extra gas to current gas price
-var startTimeUTC = args.startTimeUTC;
 
 const walletAddress=process.env.WALLET_ADDRESS;
 const walletPrivateKey=process.env.WALLET_PRIVATE_KEY;
-const network="mainnet";
 const openSeaApiKey=process.env.OPENSEA_API_KEY; // API key is required
 
-console.log("walletAddress: " + walletAddress)
-console.log("network: " + network)
-console.log("openSeaAssetUrl: " + openSeaAssetUrl)
-console.log("providerUrl: " + providerUrl)
-
-if (!walletAddress || !walletPrivateKey || !openSeaApiKey) {
+if (!walletAddress || !walletPrivateKey || !openSeaApiKey || !providerUrl) {
   console.error("Missing .env variables!");
-  return;
-}
-
-if (!openSeaAssetUrl || !providerUrl) {
-  console.error("Missing required arguments!");
   return;
 }
 
@@ -62,6 +47,7 @@ const seaport = new OpenSeaPort(
 async function main() {
   console.log("Start...");
   const order = await getOrder('5250536420') // Change this according to order id you want to buy
+  console.log(order)
   const transactionHash = await seaport.fulfillOrder({ //Fulfilling order
     order,
     accountAddress: walletAddress,

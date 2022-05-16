@@ -1,10 +1,11 @@
+require('dotenv').config();
 const pg = require('pg');
 
 const client = new pg.Client({
-  user: 'postgres',
-  host: 'traitintel.cqtkako0gaxx.ap-south-1.rds.amazonaws.com',
-  database: 'traitintel',
-  password: 'traitintel444',
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
 });
 
 const orderBlob = async (opensea_listings_id) => {
